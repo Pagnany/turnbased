@@ -3,12 +3,31 @@ use entity::Entity;
 
 fn main() {
     println!("Game start");
+    println!("");
 
+    let mut round = 1;
     let player1 = Entity::new(String::from("Nani"));
     let player2 = Entity::new(String::from("COM"));
 
-    let player2 = player1.hit_entity(player2);
+    println!("---- ROUND {} ----", round);
 
     player1.print_stats();
     player2.print_stats();
+
+    println!("");
+    println!("Actions: ");
+    println!(" 1 Light Attack");
+    println!(" 2 Heavy Attack");
+    println!(" 3 Spell");
+
+    let mut line = String::new();
+    let b1 = std::io::stdin().read_line(&mut line).unwrap();
+    let mut line = line.trim();
+
+    match line {
+        "1" => {}
+        "2" => {}
+        "3" => {}
+        _ => (),
+    }
 }

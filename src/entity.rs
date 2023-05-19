@@ -1,3 +1,5 @@
+use std::collections::LinkedList;
+
 pub struct Entity {
     name: String,
     health: i32,
@@ -7,6 +9,7 @@ pub struct Entity {
     att_buff: f32,
     def_buff: f32,
     speed: i32,
+    spells: LinkedList<Spell>,
 }
 
 impl Entity {
@@ -20,6 +23,7 @@ impl Entity {
             att_buff: 1.0,
             def_buff: 1.0,
             speed: 10,
+            spells: LinkedList::new(),
         }
     }
     pub fn hit_entity(self: &Self, enemy: Entity) -> Entity {
