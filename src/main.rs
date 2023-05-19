@@ -4,12 +4,11 @@ use entity::Entity;
 fn main() {
     println!("Game start");
 
-    let player1 = Entity::new(String::from("P1"));
-    let player2 = Entity::new(String::from("P2"));
-
+    let player1 = Entity::new(String::from("Nani"));
+    let player2 = Entity::new(String::from("COM"));
 
     let player2 = player1.hit_entity(player2);
 
-    let hamene = player2.get_health();
-    println!("{}", hamene);
+    player1.print_stats();
+    player2.print_stats();
 }
