@@ -11,8 +11,6 @@ fn main() {
     let player1 = Entity::new(String::from("Nani"));
     let player2 = Entity::new(String::from("COM"));
 
-    let conn = Connection::open("./db/turnbased.db").unwrap();
-
     loop {
         println!("---- ROUND {} ----", round);
 
@@ -34,7 +32,7 @@ fn main() {
         match line {
             "1" => {}
             "2" => {}
-            "3" => {}
+            "3" => {player1.print_spells()}
             "4" => break,
             _ => continue,
         }

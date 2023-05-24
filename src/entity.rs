@@ -1,4 +1,26 @@
-use std::collections::LinkedList;
+use rusqlite::{Connection, Result};
+
+pub fn get_spells_from_db() -> Vec<Spell> {
+    let conn = Connection::open("./db/turnbased.db").unwrap();
+    let mut stmt = conn.prepare("select * from spells;").unwrap();
+
+    let mut vec_spells = Vec::<Spell>::new();
+
+    let spells = stmt
+        .query_map([], |row| {
+            Ok(Spell {
+                name: row.get(1).unwrap(),
+                dmg: row.get(2).unwrap(),
+                cost: row.get(3).unwrap(),
+                att_buff: row.get(4).unwrap(),
+                def_buff: row.get(5).unwrap(),
+            })
+        }).unwrap();
+    for spe in spells {
+        vec_spells.push(spe.unwrap())
+    } 
+    vec_spells
+}
 
 pub struct Entity {
     name: String,
@@ -9,9 +31,8 @@ pub struct Entity {
     att_buff: f32,
     def_buff: f32,
     speed: i32,
-    spells: LinkedList<Spell>,
+    spells: Vec<Spell>,
 }
-
 
 impl Entity {
     pub fn new(name: String) -> Entity {
@@ -24,9 +45,10 @@ impl Entity {
             att_buff: 1.0,
             def_buff: 1.0,
             speed: 10,
-            spells: LinkedList::new(),
+            spells: get_spells_from_db(),
         }
     }
+
     pub fn hit_entity(self: &Self, enemy: Entity) -> Entity {
         Entity {
             health: enemy.health - self.light_attack_dmg,
@@ -42,8 +64,14 @@ impl Entity {
         println!("Def Buff: {}", self.def_buff);
         println!("Speed: {}", self.speed);
     }
-}
 
+    pub fn print_spells(self: &Self) {
+        for spell in &self.spells {
+            println!("{}", spell.name);
+        }
+    }
+}
+#[derive(Debug)]
 pub struct Spell {
     name: String,
     dmg: i32,
