@@ -1,8 +1,6 @@
 mod entity;
 use entity::Entity;
 
-use rusqlite::{Connection, Result};
-
 fn main() {
     println!("Game start");
     println!("");
@@ -24,7 +22,6 @@ fn main() {
         println!(" 3 Spell");
         println!(" 4 EXIT");
 
-
         let mut line = String::new();
         let _b1 = std::io::stdin().read_line(&mut line).unwrap();
         let line = line.trim();
@@ -32,7 +29,7 @@ fn main() {
         match line {
             "1" => {}
             "2" => {}
-            "3" => {player1.print_spells()}
+            "3" => player1.print_spells(),
             "4" => break,
             _ => continue,
         }
