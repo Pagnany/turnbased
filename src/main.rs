@@ -1,6 +1,8 @@
 mod entity;
 use entity::Entity;
 
+use rusqlite::{Connection, Result};
+
 fn main() {
     println!("Game start");
     println!("");
@@ -8,6 +10,8 @@ fn main() {
     let mut round = 1;
     let player1 = Entity::new(String::from("Nani"));
     let player2 = Entity::new(String::from("COM"));
+
+    let conn = Connection::open("./db/turnbased.db").unwrap();
 
     loop {
         println!("---- ROUND {} ----", round);
@@ -24,8 +28,8 @@ fn main() {
 
 
         let mut line = String::new();
-        let b1 = std::io::stdin().read_line(&mut line).unwrap();
-        let mut line = line.trim();
+        let _b1 = std::io::stdin().read_line(&mut line).unwrap();
+        let line = line.trim();
 
         match line {
             "1" => {}

@@ -12,6 +12,7 @@ pub struct Entity {
     spells: LinkedList<Spell>,
 }
 
+
 impl Entity {
     pub fn new(name: String) -> Entity {
         Entity {
