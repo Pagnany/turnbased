@@ -1,4 +1,4 @@
-use rusqlite::{Connection};
+use rusqlite::Connection;
 
 pub fn get_spells_from_db() -> Vec<Spell> {
     let conn = Connection::open("./db/turnbased.db").unwrap();
@@ -68,8 +68,11 @@ impl Entity {
     }
 
     pub fn print_spells(self: &Self) {
+        println!("Spells:");
+        let mut i = 1;
         for spell in &self.spells {
-            println!("{}", spell.name);
+            println!(" {} {}",i, spell.name);
+            i += 1;
         }
     }
 }
