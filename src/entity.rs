@@ -71,7 +71,7 @@ impl Entity {
         println!("Spells:");
         let mut i = 1;
         for spell in &self.spells {
-            println!(" {} {}",i, spell.name);
+            println!(" {} {}", i, spell.name);
             i += 1;
         }
     }
