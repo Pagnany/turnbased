@@ -14,7 +14,7 @@ impl Game {
             round: 1,
         }
     }
-    pub fn nextround(mut self) -> Game {
+    pub fn nextround(mut self) -> GameState {
         println!("---- ROUND {} ----", self.round);
 
         self.player1.print_stats();
@@ -35,17 +35,17 @@ impl Game {
             "1" => {}
             "2" => {}
             "3" => self.player1.print_spells(),
-            "4" => (),
+            "4" => (return GameState::GameOver),
             _ => (),
         }
 
         self.round += 1;
 
-        self
+        GameState::Game(self)
     }
 }
 
 pub enum GameState {
     Game(Game),
-    GameOver
+    GameOver,
 }
