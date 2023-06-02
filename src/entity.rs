@@ -24,8 +24,8 @@ pub fn get_spells_from_db() -> Vec<Spell> {
 }
 
 pub struct Entity {
-    name: String,
-    health: i32,
+    pub name: String,
+    pub health: i32,
     mana: i32,
     light_attack_dmg: i32,
     heavy_attack_dmg: i32,
@@ -60,22 +60,20 @@ impl Entity {
     pub fn print_stats(self: &Self) {
         println!("");
         println!("{}", self.name);
-        println!("Health: {}", self.health);
-        println!("Mana: {}", self.mana);
-        println!("Att Buff: {}", self.att_buff);
-        println!("Def Buff: {}", self.def_buff);
-        println!("Speed: {}", self.speed);
+        println!(" Health: {}", self.health);
+        println!(" Mana: {}", self.mana);
+        println!(" Att Buff: {}", self.att_buff);
+        println!(" Def Buff: {}", self.def_buff);
+        println!(" Speed: {}", self.speed);
     }
 
     pub fn print_spells(self: &Self) {
-        println!("Spells:");
-        let mut i = 1;
-        for spell in &self.spells {
-            println!(" {} {}", i, spell.name);
-            i += 1;
+        for (i, spell) in self.spells.iter().enumerate() {
+            println!(" {} {}  (Mana: {})", i + 1, spell.name, spell.cost);
         }
     }
 }
+
 #[derive(Debug)]
 pub struct Spell {
     name: String,

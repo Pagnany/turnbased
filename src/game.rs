@@ -40,6 +40,7 @@ impl Game {
 
         match line {
             "1" => {
+                self.player2 = self.player1.hit_entity(self.player2);
                 self.show_menu = true;
             }
             "2" => {
@@ -53,6 +54,15 @@ impl Game {
             _ => (),
         }
 
+        if self.player1.health <= 0 {
+            println!("{} has won!", self.player2.name);
+            return GameState::GameOver;
+        }
+        if self.player2.health <= 0 {
+            println!("{} has won!", self.player1.name);
+            return GameState::GameOver;
+        }
+        
         GameState::Game(self)
     }
 }
