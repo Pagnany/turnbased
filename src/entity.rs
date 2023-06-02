@@ -50,9 +50,25 @@ impl Entity {
         }
     }
 
-    pub fn hit_entity(self: &Self, enemy: Entity) -> Entity {
+    pub fn lower_att_buff(self: &mut Self, att_buff: f32) {
+        self.att_buff -= att_buff;
+        if self.att_buff < 0.1 {
+            self.att_buff = 0.1;
+        }
+        // show only 2 decimal places
+        self.att_buff = (self.att_buff * 100.0).round() / 100.0;
+    }
+
+    pub fn hit_entity_light(self: &Self, enemy: Entity) -> Entity {
         Entity {
-            health: enemy.health - self.light_attack_dmg,
+            health: enemy.health - (self.light_attack_dmg as f32 * self.att_buff) as i32,
+            ..enemy
+        }
+    }
+
+    pub fn hit_entity_heavy(self: &Self, enemy: Entity) -> Entity {
+        Entity {
+            health: enemy.health - (self.heavy_attack_dmg as f32 * self.att_buff) as i32,
             ..enemy
         }
     }
@@ -74,7 +90,6 @@ impl Entity {
     }
 }
 
-#[derive(Debug)]
 pub struct Spell {
     name: String,
     dmg: i32,

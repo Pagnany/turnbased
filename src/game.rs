@@ -40,10 +40,12 @@ impl Game {
 
         match line {
             "1" => {
-                self.player2 = self.player1.hit_entity(self.player2);
+                self.player2 = self.player1.hit_entity_light(self.player2);
                 self.show_menu = true;
             }
             "2" => {
+                self.player2 = self.player1.hit_entity_heavy(self.player2);
+                self.player1.lower_att_buff(0.2);
                 self.show_menu = true;
             }
             "3" => {
