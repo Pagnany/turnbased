@@ -4,6 +4,7 @@ pub struct Game {
     player1: Entity,
     player2: Entity,
     round: i32,
+    show_menu: bool,
 }
 
 impl Game {
@@ -11,35 +12,46 @@ impl Game {
         Game {
             player1: Entity::new("Hans".to_string()),
             player2: Entity::new("Wurst".to_string()),
-            round: 1,
+            round: 0,
+            show_menu: true,
         }
     }
     pub fn nextround(mut self) -> GameState {
-        println!("---- ROUND {} ----", self.round);
+        if self.show_menu {
+            self.round += 1;
+            println!("---- ROUND {} ----", self.round);
 
-        self.player1.print_stats();
-        self.player2.print_stats();
+            self.player1.print_stats();
+            self.player2.print_stats();
 
-        println!("");
-        println!("Actions: ");
-        println!(" 1 Light Attack");
-        println!(" 2 Heavy Attack");
-        println!(" 3 Spell");
-        println!(" 4 EXIT");
+            println!("");
+            println!("Actions: ");
+            println!(" 1 Light Attack");
+            println!(" 2 Heavy Attack");
+            println!(" 3 Spell");
+            println!(" 4 EXIT");
+
+            self.show_menu = false;
+        }
 
         let mut line = String::new();
         let _b1 = std::io::stdin().read_line(&mut line).unwrap();
         let line = line.trim();
 
         match line {
-            "1" => {}
-            "2" => {}
-            "3" => self.player1.print_spells(),
-            "4" => (return GameState::GameOver),
+            "1" => {
+                self.show_menu = true;
+            }
+            "2" => {
+                self.show_menu = true;
+            }
+            "3" => {
+                self.player1.print_spells();
+                self.show_menu = false;
+            }
+            "4" => return GameState::GameOver,
             _ => (),
         }
-
-        self.round += 1;
 
         GameState::Game(self)
     }
