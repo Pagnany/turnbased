@@ -14,8 +14,9 @@ pub fn get_spells_from_db() -> Vec<Spell> {
                 cost: row.get(3).unwrap(),
                 att_buff_self: row.get(4).unwrap(),
                 def_buff_self: row.get(5).unwrap(),
-                att_buff_enemy:row.get(6).unwrap(),
+                att_buff_enemy: row.get(6).unwrap(),
                 def_buff_enemy: row.get(7).unwrap(),
+                heal: row.get(8).unwrap(),
             })
         })
         .unwrap();
@@ -34,7 +35,8 @@ pub struct Entity {
     att_buff: f32,
     def_buff: f32,
     speed: i32,
-    spells: Vec<Spell>,
+    pub spells: Vec<Spell>,
+    skip_turns: i32,
 }
 
 impl Entity {
@@ -49,6 +51,7 @@ impl Entity {
             def_buff: 1.0,
             speed: 10,
             spells: get_spells_from_db(),
+            skip_turns: 0,
         }
     }
 
@@ -75,17 +78,19 @@ impl Entity {
         }
     }
 
-    pub fn use_spell(self: &mut Self, enemy: Entity, spell: &Spell) -> Entity {
+    pub fn use_spell(self: &mut Self, enemy: Entity, spell_index: usize) -> Entity {
+        let spell = &self.spells[spell_index];
+
         let temp = Entity {
             health: enemy.health - (spell.dmg as f32 * self.att_buff) as i32,
-            att_buff: enemy.att_buff + spell.att_buff_enemy,
-            def_buff: enemy.def_buff + spell.def_buff_enemy,
+            att_buff: enemy.att_buff * spell.att_buff_enemy,
+            def_buff: enemy.def_buff * spell.def_buff_enemy,
             ..enemy
         };
 
         self.mana -= spell.cost;
-        self.att_buff += spell.att_buff_self;
-        self.def_buff += spell.def_buff_self;
+        self.att_buff *= spell.att_buff_self;
+        self.def_buff *= spell.def_buff_self;
 
         return temp;
     }
@@ -103,6 +108,12 @@ impl Entity {
     pub fn print_spells(self: &Self) {
         for (i, spell) in self.spells.iter().enumerate() {
             println!(" {} {}  (Mana: {})", i + 1, spell.name, spell.cost);
+            println!("    Dmg: {}", spell.dmg);
+            println!("    Att Buff Self: {}", spell.att_buff_self);
+            println!("    Def Buff Self: {}", spell.def_buff_self);
+            println!("    Att Buff Enemy: {}", spell.att_buff_enemy);
+            println!("    Def Buff Enemy: {}", spell.def_buff_enemy);
+            println!("    Heal: {}", spell.heal);
         }
     }
 }
@@ -115,4 +126,5 @@ pub struct Spell {
     def_buff_self: f32,
     att_buff_enemy: f32,
     def_buff_enemy: f32,
+    heal: f32,
 }

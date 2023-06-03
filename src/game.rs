@@ -44,7 +44,7 @@ impl Game {
         let mut line = String::new();
         let _b1 = std::io::stdin()
             .read_line(&mut line)
-            .expect("Can't get user input");
+            .expect("Can't get User Input");
         let line = line.trim();
 
         // Handle user input for the menu we are in
@@ -69,7 +69,14 @@ impl Game {
                 "0" => {
                     self.menu = GameMenu::Main;
                 }
-                _ => (),
+                _ => {
+                    let spell_index = line.parse::<usize>().expect("Can't get Spell Input") - 1;
+                    if spell_index < self.player1.spells.len() {
+                        self.player2 = self.player1.use_spell(self.player2, spell_index);
+                        self.round += 1;
+                        self.menu = GameMenu::Main;
+                    }
+                }
             },
         }
 
