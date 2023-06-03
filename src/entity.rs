@@ -14,8 +14,8 @@ pub fn get_spells_from_db() -> Vec<Spell> {
                 cost: row.get(3).unwrap(),
                 att_buff_self: row.get(4).unwrap(),
                 def_buff_self: row.get(5).unwrap(),
-                att_buff_enemy: 0.0,
-                def_buff_enemy: 0.0,
+                att_buff_enemy:row.get(6).unwrap(),
+                def_buff_enemy: row.get(7).unwrap(),
             })
         })
         .unwrap();
