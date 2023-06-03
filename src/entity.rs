@@ -12,13 +12,15 @@ pub fn get_spells_from_db() -> Vec<Spell> {
                 name: row.get(1).unwrap(),
                 dmg: row.get(2).unwrap(),
                 cost: row.get(3).unwrap(),
-                att_buff: row.get(4).unwrap(),
-                def_buff: row.get(5).unwrap(),
+                att_buff_self: row.get(4).unwrap(),
+                def_buff_self: row.get(5).unwrap(),
+                att_buff_enemy: 0.0,
+                def_buff_enemy: 0.0,
             })
         })
         .unwrap();
-    for spe in spells {
-        vec_spells.push(spe.unwrap())
+    for spell in spells {
+        vec_spells.push(spell.unwrap())
     }
     vec_spells
 }
@@ -73,6 +75,21 @@ impl Entity {
         }
     }
 
+    pub fn use_spell(self: &mut Self, enemy: Entity, spell: &Spell) -> Entity {
+        let temp = Entity {
+            health: enemy.health - (spell.dmg as f32 * self.att_buff) as i32,
+            att_buff: enemy.att_buff + spell.att_buff_enemy,
+            def_buff: enemy.def_buff + spell.def_buff_enemy,
+            ..enemy
+        };
+
+        self.mana -= spell.cost;
+        self.att_buff += spell.att_buff_self;
+        self.def_buff += spell.def_buff_self;
+
+        return temp;
+    }
+
     pub fn print_stats(self: &Self) {
         println!("");
         println!("{}", self.name);
@@ -94,6 +111,8 @@ pub struct Spell {
     name: String,
     dmg: i32,
     cost: i32,
-    att_buff: f32,
-    def_buff: f32,
+    att_buff_self: f32,
+    def_buff_self: f32,
+    att_buff_enemy: f32,
+    def_buff_enemy: f32,
 }

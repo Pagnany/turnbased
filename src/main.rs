@@ -6,7 +6,7 @@ fn main() {
 
     loop {
         match my_game {
-            game::GameState::Game(game) => my_game = game.nextround(),
+            game::GameState::Game(game) => my_game = game.gameloop(),
             game::GameState::GameOver => break,
         }
     }
