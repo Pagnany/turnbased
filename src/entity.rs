@@ -48,7 +48,7 @@ impl Entity {
             light_attack_dmg: 10,
             heavy_attack_dmg: 20,
             att_buff: 1.0,
-            def_buff: 1.0,
+            def_buff: 1.5,
             speed: 10,
             spells: get_spells_from_db(),
             skip_turns: 0,
@@ -66,14 +66,16 @@ impl Entity {
 
     pub fn hit_entity_light(self: &Self, enemy: Entity) -> Entity {
         Entity {
-            health: enemy.health - (self.light_attack_dmg as f32 * self.att_buff) as i32,
+            health: enemy.health
+                - ((self.light_attack_dmg as f32 * self.att_buff) / enemy.def_buff as f32) as i32,
             ..enemy
         }
     }
 
     pub fn hit_entity_heavy(self: &Self, enemy: Entity) -> Entity {
         Entity {
-            health: enemy.health - (self.heavy_attack_dmg as f32 * self.att_buff) as i32,
+            health: enemy.health
+                - ((self.heavy_attack_dmg as f32 * self.att_buff) / enemy.def_buff as f32) as i32,
             ..enemy
         }
     }
@@ -82,7 +84,8 @@ impl Entity {
         let spell = &self.spells[spell_index];
 
         let temp = Entity {
-            health: enemy.health - (spell.dmg as f32 * self.att_buff) as i32,
+            health: enemy.health
+                - ((spell.dmg as f32 * self.att_buff) / enemy.def_buff as f32) as i32,
             att_buff: enemy.att_buff * spell.att_buff_enemy,
             def_buff: enemy.def_buff * spell.def_buff_enemy,
             ..enemy
@@ -91,6 +94,7 @@ impl Entity {
         self.mana -= spell.cost;
         self.att_buff *= spell.att_buff_self;
         self.def_buff *= spell.def_buff_self;
+        self.health += spell.heal as i32;
 
         return temp;
     }
